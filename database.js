@@ -15,7 +15,8 @@ db.run(`CREATE TABLE IF NOT EXISTS users (
   country TEXT,
   gender TEXT,
   qualification TEXT,
-  password TEXT
+  password TEXT,
+  role TEXT DEFAULT 'user'
 )`);
 
 module.exports = db;

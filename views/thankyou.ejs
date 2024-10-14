@@ -4,11 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css">
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Thank You!</h1>
-    <p>Welcome, <%- email %>!</p>
-    <a href="/logout">Logout</a>
+    <div class="container">
+        <h1><i class="fas fa-check-circle"></i> Thank You!</h1>
+        <p>You are logged in as <strong><%= email %></strong>.</p>
+        <div class="button-container">
+            <a href="/profile" class="button"><i class="fas fa-user"></i> View Profile</a>
+            <a href="/userlist" class="button"><i class="fas fa-users"></i> View All Users</a>
+            <a href="/logout" class="button"><i class="fas fa-users"></i> Logout</a>
+        </div>
+        <div class="welcome-message" id="welcomeMessage"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            welcomeMessage.innerHTML = '<i class="fas fa-hand-wave"></i> Welcome, <%= email %>!';
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="profile-container">
+        <h1>User Profile</h1>
+        <div class="profile-info">
+            <p><strong><i class="fas fa-user"></i> Name:</strong> <%= user.name %></p>
+            <p><strong><i class="fas fa-envelope"></i> Email:</strong> <%= user.email %></p>
+            <p><strong><i class="fas fa-phone"></i> Phone:</strong> <%= user.phone %></p>
+            <p><strong><i class="fas fa-globe"></i> Country:</strong> <%= user.country %></p>
+            <p><strong><i class="fas fa-venus-mars"></i> Gender:</strong> <%= user.gender %></p>
+            <p><strong><i class="fas fa-graduation-cap"></i> Qualification:</strong> <%= user.qualification %></p>
+        </div>
+        <div class="button-container">
+            <a href="/edit-profile" class="button">Edit Profile</a>
+            <a href="/logout" class="button secondary">Logout</a>
+        </div>
+        <div class="welcome-message" id="welcomeMessage"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            welcomeMessage.textContent = "Welcome back, <%= user.name %>!";
+        });
+    </script>
+</body>
+</html>

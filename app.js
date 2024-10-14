@@ -1,15 +1,18 @@
 const express = require('express');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const db = require('./database');
+
 
 const app = express();
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(session({
-  secret: 'your-secret-key',
+  secret: 'tic4304',
   resave: false,
   saveUninitialized: true
 }));
@@ -31,6 +34,7 @@ app.post('/login', (req, res) => {
     if (row) {
       req.session.loggedin = true;
       req.session.email = email;
+      res.cookie('role', row.role, { httpOnly: false }); 
       res.redirect('/thankyou');
     } else {
       res.send('Incorrect Email and/or Password!');
@@ -80,4 +84,60 @@ app.get('/logout', (req, res) => {
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
+});
+
+
+function isAdmin(req, res, next) {
+  if (req.session.loggedin && req.cookies.role === 'admin')  {
+      return next();
+  } else {
+      res.status(403).send('Access Denied: Admins Only');
+  }
+}
+
+
+
+app.get('/userlist',isAdmin, (req, res) => {
+  if (req.session.loggedin) {
+    const query = "SELECT id, name, email, phone, country, gender, qualification FROM users";
+    db.all(query, [], (err, rows) => {
+      if (err) {
+        console.error('Database error:', err.message);
+        return res.status(500).send('An error occurred while fetching users');
+      }
+      res.render('userlist', { users: rows });
+    });
+  } else {
+    res.redirect('/');
+  }
+});
+
+
+app.get('/profile', (req, res) => {
+  if (req.session.loggedin) {
+    const query = `SELECT * FROM users WHERE email = ?`;
+    db.get(query, [req.session.email], (err, row) => {
+      if (err) {
+        console.error('Database error:', err.message);
+        return res.status(500).send('An error occurred');
+      }
+      if (row) {
+        res.render('profile', { user: row });
+      } else {
+        res.status(404).send('User not found');
+      }
+    });
+  } else {
+    res.redirect('/');
+  }
+});
+
+
+app.get('/set-role/:role', (req, res) => {
+  if (req.session.loggedin) {
+    req.session.role = req.params.role;
+    res.send(`Role set to ${req.params.role}. You can now access admin routes if set to 'admin'.`);
+  } else {
+    res.send('You need to log in first.');
+  }
 });
