@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tic4303-websecurity
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tic4303-websecurity
+  template:
+    metadata:
+      labels:
+        app: tic4303-websecurity
+    spec:
+      containers:
+        - name: tic4303-websecurity
+          image: ziming27/tic4303_websecurity:latest
+          ports:
+            - containerPort: 3000
